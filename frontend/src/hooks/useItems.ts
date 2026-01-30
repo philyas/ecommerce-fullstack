@@ -38,12 +38,25 @@ export function useItems() {
   const toggleBought = useCallback(async (id: string, bought: boolean) => {
     try {
       setError(null);
-      const updatedItem = await itemsApi.updateBought(id, bought);
+      const updatedItem = await itemsApi.update(id, { bought });
       setItems((prev) =>
         prev.map((item) => (item._id === id ? updatedItem : item))
       );
     } catch (err) {
       setError(getErrorMessage(err) || 'Failed to update item');
+      throw err;
+    }
+  }, []);
+
+  const updateQuantity = useCallback(async (id: string, quantity: number) => {
+    try {
+      setError(null);
+      const updatedItem = await itemsApi.update(id, { quantity });
+      setItems((prev) =>
+        prev.map((item) => (item._id === id ? updatedItem : item))
+      );
+    } catch (err) {
+      setError(getErrorMessage(err) || 'Failed to update quantity');
       throw err;
     }
   }, []);
@@ -66,6 +79,7 @@ export function useItems() {
     setError,
     addItem,
     toggleBought,
+    updateQuantity,
     deleteItem,
     refetch: fetchItems,
   };

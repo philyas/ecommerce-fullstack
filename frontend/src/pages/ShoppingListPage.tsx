@@ -11,6 +11,7 @@ export function ShoppingListPage() {
     setError,
     addItem,
     toggleBought,
+    updateQuantity,
     deleteItem,
   } = useItems();
 
@@ -51,6 +52,7 @@ export function ShoppingListPage() {
           <ShoppingList
             items={items}
             onToggleBought={toggleBought}
+            onUpdateQuantity={updateQuantity}
             onDelete={deleteItem}
           />
         )}

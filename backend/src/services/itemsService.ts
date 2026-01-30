@@ -6,18 +6,22 @@ export const itemsService = {
     return ShoppingItem.find().sort({ createdAt: -1 });
   },
 
-  async create(name: string): Promise<IShoppingItemDocument> {
+  async create(name: string, quantity: number = 1): Promise<IShoppingItemDocument> {
     const newItem = new ShoppingItem({
       name: name.trim(),
+      quantity,
       bought: false,
     });
     return newItem.save();
   },
 
-  async updateBought(id: string, bought: boolean): Promise<IShoppingItemDocument | null> {
+  async update(
+    id: string,
+    updates: { bought?: boolean; quantity?: number }
+  ): Promise<IShoppingItemDocument | null> {
     return ShoppingItem.findByIdAndUpdate(
       id,
-      { bought },
+      updates,
       { new: true, runValidators: true }
     );
   },

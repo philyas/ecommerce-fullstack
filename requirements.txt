@@ -1,0 +1,83 @@
+# Full Stack Test - Anforderungen
+
+## Ziel
+
+Erstelle eine einfache Full Stack Anwendung (React + TypeScript + Express + MongoDB / Mongoose),
+mit der Benutzer Produkte zur Einkaufsliste hinzufuegen, abhaken und loeschen koennen.
+
+
+## Funktionale Anforderungen
+
+### Frontend (React + TypeScript)
+
+- Input-Feld + Button zum Hinzufuegen eines Eintrags:
+  - Produktname (z.B. "Butter")
+
+- Liste der Eintraege mit:
+  - Produktname
+  - Mengenangabe mit +/- Steuerung (1-999)
+  - Checkbox "gekauft" (der Eintrag wird durchgestrichen nach dem Abhaken)
+  - "Loeschen"-Button
+
+### Anforderungen an die UI
+
+- Externes UI-Toolkit erlaubt
+- Die Oberflaeche sollte einfach, aber ansprechend gestaltet sein
+- Keine festen Vorgaben fuers Layout - Kreativitaet erlaubt
+
+
+### Backend (Express + TypeScript)
+
+#### Endpunkte
+
+GET /items
+  -> Gibt die Einkaufsliste zurueck
+
+POST /items
+  -> Fuegt einen neuen Eintrag hinzu
+  Body: { name: string }
+
+PUT /items/:id
+  -> Aktualisiert den "gekauft"-Status
+  Body: { bought: boolean }
+
+DELETE /items/:id
+  -> Loescht einen Eintrag
+
+
+### MongoDB-Datenmodell
+
+interface ShoppingItem {
+  _id: ObjectId;
+  name: string;
+  quantity: number;  // Menge (1-999)
+  bought: boolean;
+  createdAt: Date;
+}
+
+
+## Technische Anforderungen
+
+- React mit TypeScript im Frontend
+- Express mit TypeScript im Backend
+- MongoDB als Datenbank (lokal oder ueber MongoDB Atlas)
+- Zustand im Frontend: client-seitig (z.B. via useState/useEffect)
+- Keine Authentifizierung notwendig
+
+
+## Abgabe
+
+- GitHub-Repo mit README.md:
+  - Setup-Anleitung
+  - Hinweis, ob externe UI-Bibliotheken verwendet wurden
+- Strukturierter Code (Frontend und Backend getrennt)
+
+
+## Bewertungskriterien
+
+- Funktionalitaet der Anwendung
+- Sauberer TypeScript-Code
+  - Typsicherheit im Frontend und Backend
+- Nutzung von React-Patterns & Zustand
+- Lesbarkeit & Struktur des Codes
+- UI-Qualitaet (Design, Benutzerfreundlichkeit, Responsiveness)

@@ -13,6 +13,13 @@ export function isBoolean(value: unknown): value is boolean {
 }
 
 /**
+ * Prüft, ob der Wert eine positive ganze Zahl ist.
+ */
+export function isPositiveInteger(value: unknown): value is number {
+  return typeof value === 'number' && Number.isInteger(value) && value >= 1;
+}
+
+/**
  * Prüft, ob der String wie eine gültige MongoDB ObjectId aussieht (24 Hex-Zeichen).
  */
 export function isValidMongoId(value: unknown): value is string {

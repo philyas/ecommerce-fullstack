@@ -106,6 +106,7 @@ Ecommerce-Fullstack/
         │   └── index.ts
         └── components/
             ├── AddItemForm.tsx
+            ├── ConfirmModal.tsx
             ├── ShoppingList.tsx
             └── ShoppingListItem.tsx
 ```
@@ -115,8 +116,8 @@ Ecommerce-Fullstack/
 | Methode | Endpunkt | Beschreibung | Request Body |
 |---------|----------|--------------|--------------|
 | GET | `/items` | Alle Einkaufsitems abrufen | - |
-| POST | `/items` | Neues Item hinzufügen | `{ name: string }` |
-| PUT | `/items/:id` | Gekauft-Status aktualisieren | `{ bought: boolean }` |
+| POST | `/items` | Neues Item hinzufügen | `{ name: string, quantity?: number }` |
+| PUT | `/items/:id` | Item aktualisieren | `{ bought?: boolean, quantity?: number }` |
 | DELETE | `/items/:id` | Item löschen | - |
 
 ## MongoDB Datenmodell
@@ -125,6 +126,7 @@ Ecommerce-Fullstack/
 interface ShoppingItem {
   _id: ObjectId;
   name: string;
+  quantity: number;  // Menge (1-999)
   bought: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -171,11 +173,12 @@ docker-compose down -v
 
 ## Features
 
-- Produkte zur Einkaufsliste hinzufügen
+- Produkte zur Einkaufsliste hinzufuegen
+- Produktmenge anpassen (+/- Steuerung, 1-999)
 - Produkte als "gekauft" markieren (mit Durchstreichung)
-- Produkte löschen
-- Übersichtliche Trennung zwischen "Zu kaufen" und "Gekauft"
-- Responsive Design für Mobile und Desktop
+- Produkte loeschen (mit Bestaetigungsdialog)
+- Uebersichtliche Trennung zwischen "Zu kaufen" und "Gekauft"
+- Responsive Design fuer Mobile und Desktop
 - Loading-States und Error-Handling
 
 ## Screenshots

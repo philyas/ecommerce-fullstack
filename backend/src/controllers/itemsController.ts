@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { itemsService } from '../services/itemsService.js';
-import { isNonEmptyString, isBoolean } from '../utils/validation.js';
+import { isNonEmptyString, isBoolean, isPositiveInteger } from '../utils/validation.js';
 import { sendError, sendBadRequest, sendNotFound } from '../utils/response.js';
 
 export const itemsController = {
@@ -16,14 +16,19 @@ export const itemsController = {
 
   async create(req: Request, res: Response): Promise<void> {
     try {
-      const { name } = req.body;
+      const { name, quantity } = req.body;
 
       if (!isNonEmptyString(name)) {
         sendBadRequest(res, 'Name is required and must be a non-empty string');
         return;
       }
 
-      const savedItem = await itemsService.create(name);
+      if (quantity !== undefined && !isPositiveInteger(quantity)) {
+        sendBadRequest(res, 'Quantity must be a positive integer');
+        return;
+      }
+
+      const savedItem = await itemsService.create(name, quantity);
       res.status(201).json(savedItem);
     } catch (error) {
       console.error('Error creating item:', error);
@@ -31,17 +36,35 @@ export const itemsController = {
     }
   },
 
-  async updateBought(req: Request, res: Response): Promise<void> {
+  async update(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const { bought } = req.body;
+      const { bought, quantity } = req.body;
 
-      if (!isBoolean(bought)) {
-        sendBadRequest(res, 'Bought must be a boolean value');
+      const updates: { bought?: boolean; quantity?: number } = {};
+
+      if (bought !== undefined) {
+        if (!isBoolean(bought)) {
+          sendBadRequest(res, 'Bought must be a boolean value');
+          return;
+        }
+        updates.bought = bought;
+      }
+
+      if (quantity !== undefined) {
+        if (!isPositiveInteger(quantity)) {
+          sendBadRequest(res, 'Quantity must be a positive integer (1-999)');
+          return;
+        }
+        updates.quantity = quantity;
+      }
+
+      if (Object.keys(updates).length === 0) {
+        sendBadRequest(res, 'At least one field (bought or quantity) is required');
         return;
       }
 
-      const updatedItem = await itemsService.updateBought(id, bought);
+      const updatedItem = await itemsService.update(id, updates);
 
       if (!updatedItem) {
         sendNotFound(res);

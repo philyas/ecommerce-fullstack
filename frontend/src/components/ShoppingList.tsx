@@ -4,10 +4,11 @@ import { ShoppingListItem } from './ShoppingListItem';
 interface ShoppingListProps {
   items: ShoppingItem[];
   onToggleBought: (id: string, bought: boolean) => Promise<void>;
+  onUpdateQuantity: (id: string, quantity: number) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
 }
 
-export function ShoppingList({ items, onToggleBought, onDelete }: ShoppingListProps) {
+export function ShoppingList({ items, onToggleBought, onUpdateQuantity, onDelete }: ShoppingListProps) {
   if (items.length === 0) {
     return (
       <div className="py-16 text-center">
@@ -55,6 +56,7 @@ export function ShoppingList({ items, onToggleBought, onDelete }: ShoppingListPr
                 key={item._id}
                 item={item}
                 onToggleBought={onToggleBought}
+                onUpdateQuantity={onUpdateQuantity}
                 onDelete={onDelete}
               />
             ))}
@@ -73,6 +75,7 @@ export function ShoppingList({ items, onToggleBought, onDelete }: ShoppingListPr
                 key={item._id}
                 item={item}
                 onToggleBought={onToggleBought}
+                onUpdateQuantity={onUpdateQuantity}
                 onDelete={onDelete}
               />
             ))}
