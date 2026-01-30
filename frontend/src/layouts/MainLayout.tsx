@@ -3,12 +3,12 @@ import { Outlet, NavLink } from 'react-router-dom';
 export function MainLayout() {
   return (
     <div className="min-h-screen bg-surface">
-      <nav className="sticky top-0 z-10 bg-surface-elevated/80 backdrop-blur-xl shadow-nav">
-        <div className="mx-auto max-w-2xl px-4 sm:px-6">
-          <div className="flex h-14 items-center justify-between">
+      <nav className="sticky top-0 z-10 border-b border-zinc-200 bg-surface-elevated/80 backdrop-blur-lg">
+        <div className="mx-auto max-w-2xl px-6">
+          <div className="flex h-16 items-center justify-between">
             <NavLink
               to="/"
-              className="text-[17px] font-semibold text-label-primary hover:opacity-80"
+              className="text-lg font-semibold tracking-tight text-label-primary transition-opacity hover:opacity-70"
             >
               Einkaufsliste
             </NavLink>
@@ -16,10 +16,10 @@ export function MainLayout() {
               <NavLink
                 to="/"
                 className={({ isActive }) =>
-                  `rounded-apple px-4 py-2 text-[15px] font-medium ${
+                  `rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-black/5 text-label-primary'
-                      : 'text-label-secondary hover:bg-black/[0.04] hover:text-label-primary'
+                      ? 'bg-accent text-white'
+                      : 'text-label-secondary hover:bg-surface-muted hover:text-label-primary'
                   }`
                 }
               >
@@ -28,21 +28,21 @@ export function MainLayout() {
               <NavLink
                 to="/about"
                 className={({ isActive }) =>
-                  `rounded-apple px-4 py-2 text-[15px] font-medium ${
+                  `rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-black/5 text-label-primary'
-                      : 'text-label-secondary hover:bg-black/[0.04] hover:text-label-primary'
+                      ? 'bg-accent text-white'
+                      : 'text-label-secondary hover:bg-surface-muted hover:text-label-primary'
                   }`
                 }
               >
-                Über uns
+                Info
               </NavLink>
             </div>
           </div>
         </div>
       </nav>
 
-      <main className="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-10">
+      <main className="mx-auto max-w-2xl px-6 py-10">
         <Outlet />
       </main>
     </div>

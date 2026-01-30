@@ -21,10 +21,8 @@ export function ConfirmModal({
   onConfirm,
   onCancel,
 }: ConfirmModalProps) {
-  const modalRef = useRef<HTMLDivElement>(null);
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Focus trap and escape key handling
   useEffect(() => {
     if (!isOpen) return;
 
@@ -34,11 +32,8 @@ export function ConfirmModal({
       }
     };
 
-    // Focus the cancel button when modal opens
     cancelButtonRef.current?.focus();
-
     document.addEventListener('keydown', handleKeyDown);
-    // Prevent body scroll when modal is open
     document.body.style.overflow = 'hidden';
 
     return () => {
@@ -50,29 +45,27 @@ export function ConfirmModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-label-primary/20 backdrop-blur-sm animate-fade-in"
         onClick={!isLoading ? onCancel : undefined}
         aria-hidden
       />
 
       {/* Modal */}
       <div
-        ref={modalRef}
         role="alertdialog"
         aria-modal="true"
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
-        className="relative mx-4 w-full max-w-[320px] overflow-hidden rounded-2xl bg-white shadow-2xl"
+        className="relative w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-modal animate-scale-in"
       >
-        {/* Content */}
-        <div className="px-6 pb-5 pt-6 text-center">
-          {/* Warning Icon */}
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
+        <div className="p-6">
+          {/* Icon */}
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-danger-light">
             <svg
-              className="h-6 w-6 text-red-600"
+              className="h-5 w-5 text-danger"
               fill="none"
               stroke="currentColor"
               strokeWidth={2}
@@ -81,33 +74,34 @@ export function ConfirmModal({
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
               />
             </svg>
           </div>
 
+          {/* Content */}
           <h2
             id="modal-title"
-            className="text-[17px] font-semibold text-label-primary"
+            className="text-center text-lg font-semibold text-label-primary"
           >
             {title}
           </h2>
           <p
             id="modal-description"
-            className="mt-2 text-[15px] leading-relaxed text-label-secondary"
+            className="mt-2 text-center text-sm leading-relaxed text-label-secondary"
           >
             {message}
           </p>
         </div>
 
         {/* Actions */}
-        <div className="flex border-t border-black/[0.08]">
+        <div className="flex gap-3 border-t border-zinc-200 bg-surface-muted/50 px-6 py-4">
           <button
             ref={cancelButtonRef}
             type="button"
             onClick={onCancel}
             disabled={isLoading}
-            className="flex-1 border-r border-black/[0.08] px-4 py-3.5 text-[17px] font-medium text-accent hover:bg-black/[0.04] disabled:opacity-50 transition-colors"
+            className="btn-secondary flex-1 disabled:opacity-50"
           >
             {cancelLabel}
           </button>
@@ -115,31 +109,25 @@ export function ConfirmModal({
             type="button"
             onClick={onConfirm}
             disabled={isLoading}
-            className="flex-1 px-4 py-3.5 text-[17px] font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50 transition-colors"
+            className="flex-1 inline-flex items-center justify-center rounded-lg bg-danger px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-danger-hover active:scale-[0.98] disabled:opacity-50"
           >
             {isLoading ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg
-                  className="h-5 w-5 animate-spin"
-                  viewBox="0 0 24 24"
-                  aria-hidden
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-              </span>
+              <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" aria-hidden>
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
             ) : (
               confirmLabel
             )}
