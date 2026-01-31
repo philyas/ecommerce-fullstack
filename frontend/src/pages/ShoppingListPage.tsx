@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { AddItemForm } from '../components/AddItemForm';
+import { CongratsModal } from '../components/CongratsModal';
 import { ShoppingList } from '../components/ShoppingList';
 import { Toast } from '../components/Toast';
 import { useItems } from '../hooks/useItems';
@@ -10,6 +11,9 @@ export function ShoppingListPage() {
     visible: false,
     message: '',
   });
+  const [showCongratsModal, setShowCongratsModal] = useState(false);
+  const prevPendingCountRef = useRef<number | undefined>(undefined);
+
   const {
     items,
     loading,
@@ -23,6 +27,19 @@ export function ShoppingListPage() {
 
   const pendingCount = items.filter((i) => !i.bought).length;
   const boughtCount = items.filter((i) => i.bought).length;
+
+  useEffect(() => {
+    const prev = prevPendingCountRef.current;
+    prevPendingCountRef.current = pendingCount;
+    if (
+      items.length > 0 &&
+      pendingCount === 0 &&
+      prev !== undefined &&
+      prev > 0
+    ) {
+      setShowCongratsModal(true);
+    }
+  }, [items.length, pendingCount]);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col animate-fade-in">
@@ -83,6 +100,11 @@ export function ShoppingListPage() {
         visible={toast.visible}
         onHide={() => setToast((p) => ({ ...p, visible: false }))}
         duration={1500}
+      />
+
+      <CongratsModal
+        isOpen={showCongratsModal}
+        onClose={() => setShowCongratsModal(false)}
       />
 
       {items.length > 0 && (
