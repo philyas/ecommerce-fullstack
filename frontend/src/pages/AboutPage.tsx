@@ -1,3 +1,49 @@
+const manualSteps = [
+  {
+    icon: (
+      <svg className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+    ),
+    title: 'Produkt hinzufügen',
+    text: 'Oben im Eingabefeld Namen eintippen und auf „Hinzufügen“ klicken (oder Enter).',
+  },
+  {
+    icon: (
+      <svg className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+    ),
+    title: 'Als erledigt markieren',
+    text: 'Auf die Checkbox links neben dem Produkt tippen. Der Haken wird gezeichnet, danach wandert das Produkt in „Erledigt“.',
+  },
+  {
+    icon: (
+      <svg className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
+      </svg>
+    ),
+    title: 'Menge verringern / erhöhen',
+    text: 'Mit den Buttons − und + neben der Menge die Anzahl anpassen (1–999).',
+  },
+  {
+    icon: (
+      <span className="flex h-5 w-5 shrink-0 items-center justify-center text-sm font-medium tabular-nums">3</span>
+    ),
+    title: 'Menge direkt eingeben',
+    text: 'Auf die Zahl in der Mitte tippen – es öffnet sich ein Fenster, in dem du die Menge eintippen kannst.',
+  },
+  {
+    icon: (
+      <svg className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+      </svg>
+    ),
+    title: 'Produkt löschen',
+    text: 'Auf den Papierkorb rechts tippen. Es erscheint eine Abfrage – mit „Entfernen“ bestätigen.',
+  },
+];
+
 export function AboutPage() {
   return (
     <div className="animate-fade-in">
@@ -10,61 +56,28 @@ export function AboutPage() {
         </p>
       </header>
 
-      <div className="card divide-y divide-slate-200">
-        <div className="p-6">
+      <div className="card p-6">
           <h2 className="text-sm font-medium uppercase tracking-wider text-label-tertiary">
-            Beschreibung
+            Bedienungsanleitung
           </h2>
-          <p className="mt-3 text-base leading-relaxed text-label-primary">
-            Eine minimalistische Shopping-App mit modernem Design.
-            Verwalte deine Einkaeufe einfach und effizient.
+          <p className="mt-2 text-sm text-label-secondary">
+            So bedienst du die App – alle Aktionen im Überblick:
           </p>
-        </div>
-
-        <div className="p-6">
-          <h2 className="text-sm font-medium uppercase tracking-wider text-label-tertiary">
-            Technologien
-          </h2>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {['React', 'TypeScript', 'Express', 'MongoDB', 'Tailwind CSS'].map(
-              (tech) => (
-                <span
-                  key={tech}
-                  className="rounded-md bg-surface-muted px-3 py-1.5 text-sm font-medium text-label-secondary"
-                >
-                  {tech}
+          <ul className="mt-4 space-y-5">
+            {manualSteps.map((step, i) => (
+              <li key={i} className="flex gap-4">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-muted text-label-secondary">
+                  {step.icon}
                 </span>
-              )
-            )}
-          </div>
-        </div>
-
-        <div className="p-6">
-          <h2 className="text-sm font-medium uppercase tracking-wider text-label-tertiary">
-            Features
-          </h2>
-          <ul className="mt-4 space-y-3">
-            {[
-              'Produkte hinzufuegen und verwalten',
-              'Mengenangabe mit Steuerung',
-              'Als gekauft markieren',
-              'Loeschen mit Bestaetigung',
-            ].map((feature) => (
-              <li key={feature} className="flex items-center gap-3 text-base text-label-primary">
-                <svg
-                  className="h-5 w-5 shrink-0 text-success"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                {feature}
+                <div>
+                  <h3 className="font-medium text-label-primary">{step.title}</h3>
+                  <p className="mt-0.5 text-sm leading-relaxed text-label-secondary">
+                    {step.text}
+                  </p>
+                </div>
               </li>
             ))}
           </ul>
-        </div>
       </div>
     </div>
   );

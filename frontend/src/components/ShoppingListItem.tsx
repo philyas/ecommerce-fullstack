@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ShoppingItem } from '../types';
 import { ConfirmModal } from './ConfirmModal';
+import { EditQuantityModal } from './EditQuantityModal';
 
 const CHECK_DRAW_DURATION_MS = 800;
 
@@ -21,6 +22,7 @@ export function ShoppingListItem({
   const [isUpdatingQuantity, setIsUpdatingQuantity] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showQuantityModal, setShowQuantityModal] = useState(false);
   const [isAnimatingCheck, setIsAnimatingCheck] = useState(false);
   const animationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -87,6 +89,10 @@ export function ShoppingListItem({
     setShowDeleteModal(false);
   };
 
+  const handleQuantityModalConfirm = async (quantity: number) => {
+    await onUpdateQuantity(item._id, quantity);
+  };
+
   return (
     <>
       <li
@@ -151,13 +157,17 @@ export function ShoppingListItem({
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
               </svg>
             </button>
-            <span
-              className={`min-w-[2rem] text-center text-sm font-medium tabular-nums ${
+            <button
+              type="button"
+              onClick={() => setShowQuantityModal(true)}
+              disabled={isUpdatingQuantity}
+              className={`min-w-[2rem] text-center text-sm font-medium tabular-nums transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-40 ${
                 isUpdatingQuantity ? 'text-label-tertiary' : 'text-label-primary'
               }`}
+              aria-label="Menge eingeben"
             >
               {item.quantity}
-            </span>
+            </button>
             <button
               type="button"
               onClick={() => handleQuantityChange(1)}
@@ -202,6 +212,14 @@ export function ShoppingListItem({
         isLoading={isDeleting}
         onConfirm={handleDeleteConfirm}
         onCancel={handleDeleteCancel}
+      />
+
+      <EditQuantityModal
+        isOpen={showQuantityModal}
+        itemName={item.name}
+        currentQuantity={item.quantity}
+        onConfirm={handleQuantityModalConfirm}
+        onClose={() => setShowQuantityModal(false)}
       />
     </>
   );
