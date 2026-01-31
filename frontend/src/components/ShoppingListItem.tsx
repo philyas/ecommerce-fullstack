@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ShoppingItem } from '../types';
 import { ConfirmModal } from './ConfirmModal';
+
+const CHECK_DRAW_DURATION_MS = 800;
 
 interface ShoppingListItemProps {
   item: ShoppingItem;
@@ -19,13 +21,39 @@ export function ShoppingListItem({
   const [isUpdatingQuantity, setIsUpdatingQuantity] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isAnimatingCheck, setIsAnimatingCheck] = useState(false);
+  const animationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
+  }, []);
 
   const handleToggle = async () => {
-    setIsUpdating(true);
-    try {
-      await onToggleBought(item._id, !item.bought);
-    } finally {
-      setIsUpdating(false);
+    const markingAsBought = !item.bought;
+    
+    if (markingAsBought) {
+      // Erst Animation abspielen, dann API aufrufen
+      setIsAnimatingCheck(true);
+      if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
+      
+      animationTimeoutRef.current = setTimeout(async () => {
+        animationTimeoutRef.current = null;
+        setIsUpdating(true);
+        try {
+          await onToggleBought(item._id, true);
+        } finally {
+          setIsUpdating(false);
+          setIsAnimatingCheck(false);
+        }
+      }, CHECK_DRAW_DURATION_MS);
+    } else {
+      // Beim Zurücksetzen: sofort API aufrufen
+      setIsUpdating(true);
+      try {
+        await onToggleBought(item._id, false);
+      } finally {
+        setIsUpdating(false);
+      }
     }
   };
 
@@ -69,24 +97,31 @@ export function ShoppingListItem({
         <button
             type="button"
             onClick={handleToggle}
-            disabled={isUpdating}
+            disabled={isUpdating || isAnimatingCheck}
             className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all duration-200 ${
-              item.bought
+              item.bought || isAnimatingCheck
                 ? 'border-success bg-success text-white'
                 : 'border-slate-200 bg-white hover:border-label-tertiary'
             } ${isUpdating ? 'opacity-50' : ''}`}
             aria-label={item.bought ? 'Als offen markieren' : 'Als erledigt markieren'}
           >
-            {item.bought && (
+            {(item.bought || isAnimatingCheck) && (
             <svg
-              className="h-3 w-3 animate-scale-in"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={3}
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
+              className="h-3 w-3 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={3}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              viewBox="0 0 24 24"
+            >
+              <path
+                pathLength={1}
+                strokeDasharray={1}
+                className={isAnimatingCheck ? 'animate-check-draw' : '[stroke-dashoffset:0]'}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
             )}
           </button>
 

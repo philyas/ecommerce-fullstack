@@ -79,6 +79,7 @@ export default {
         'slide-up': 'slideUp 0.3s ease-out',
         'scale-in': 'scaleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)',
         'slide-in-right': 'slideInRight 0.25s ease-out',
+        'check-draw': 'checkDraw 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards',
       },
       keyframes: {
         fadeIn: {
@@ -97,6 +98,10 @@ export default {
         slideInRight: {
           '0%': { transform: 'translateX(100%)' },
           '100%': { transform: 'translateX(0)' },
+        },
+        checkDraw: {
+          '0%': { 'stroke-dashoffset': 1 },
+          '100%': { 'stroke-dashoffset': 0 },
         },
       },
     },
