@@ -13,35 +13,35 @@
 
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: #fafafa;
-    color: #18181b;
+    background-color: #f8fafc;
+    color: #0f172a;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
   ::selection {
-    background-color: #18181b;
+    background-color: #0080FF;
     color: #ffffff;
   }
 
   *:focus-visible {
-    outline: 2px solid #18181b;
+    outline: 2px solid #0080FF;
     outline-offset: 2px;
   }
 
   input:focus-visible,
   button:focus-visible {
-    outline: 2px solid #18181b;
+    outline: 2px solid #0080FF;
     outline-offset: 2px;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-accent-hover active:scale-[0.98];
+    @apply inline-flex items-center justify-center rounded-lg bg-success px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-success/90 active:scale-[0.98];
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-lg border border-zinc-200 bg-white px-5 py-2.5 text-sm font-medium text-label-primary transition-all hover:bg-surface-muted active:scale-[0.98];
+    @apply inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-label-primary transition-all hover:bg-accent-subtle active:scale-[0.98];
   }
 
   .btn-ghost {
@@ -53,11 +53,11 @@
   }
 
   .input {
-    @apply w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-base text-label-primary placeholder:text-label-tertiary transition-colors focus:border-accent focus:outline-none;
+    @apply w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-base text-label-primary placeholder:text-label-tertiary transition-colors focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20;
   }
 
   .card {
-    @apply rounded-xl border border-zinc-200 bg-surface-elevated shadow-card;
+    @apply rounded-xl border border-slate-200 bg-surface-elevated shadow-card;
   }
 }
 

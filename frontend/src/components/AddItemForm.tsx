@@ -23,7 +23,7 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-3">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
       <input
         type="text"
         value={name}
@@ -35,7 +35,7 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
       <button
         type="submit"
         disabled={isSubmitting || !name.trim()}
-        className="btn-primary px-6 disabled:cursor-not-allowed disabled:opacity-50"
+        className="btn-primary w-full px-6 sm:w-auto disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isSubmitting ? (
           <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" aria-hidden>

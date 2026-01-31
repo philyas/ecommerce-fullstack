@@ -95,7 +95,7 @@ export function ConfirmModal({
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3 border-t border-zinc-200 bg-surface-muted/50 px-6 py-4">
+        <div className="flex gap-3 border-t border-slate-200 bg-surface-muted/50 px-6 py-4">
           <button
             ref={cancelButtonRef}
             type="button"

@@ -19,24 +19,24 @@ export default {
       },
       colors: {
         surface: {
-          DEFAULT: '#fafafa',
+          DEFAULT: '#f8fafc',
           elevated: '#ffffff',
-          muted: '#f4f4f5',
+          muted: '#f1f5f9',
         },
         label: {
-          primary: '#18181b',
-          secondary: '#52525b',
-          tertiary: '#a1a1aa',
-          quaternary: '#d4d4d8',
+          primary: '#0f172a',
+          secondary: '#475569',
+          tertiary: '#64748b',
+          quaternary: '#94a3b8',
         },
         accent: {
-          DEFAULT: '#18181b',
-          hover: '#27272a',
-          subtle: '#f4f4f5',
+          DEFAULT: '#0080FF',
+          hover: '#0066CC',
+          subtle: '#e0f2fe',
         },
         success: {
-          DEFAULT: '#22c55e',
-          light: '#dcfce7',
+          DEFAULT: '#00A36C',
+          light: '#e6fff7',
         },
         danger: {
           DEFAULT: '#ef4444',
@@ -45,8 +45,8 @@ export default {
         },
       },
       borderColor: {
-        DEFAULT: '#e4e4e7',
-        light: '#f4f4f5',
+        DEFAULT: '#e2e8f0',
+        light: '#f1f5f9',
       },
       boxShadow: {
         'sm': '0 1px 2px 0 rgb(0 0 0 / 0.03)',
@@ -78,6 +78,7 @@ export default {
         'fade-in': 'fadeIn 0.2s ease-out',
         'slide-up': 'slideUp 0.3s ease-out',
         'scale-in': 'scaleIn 0.2s ease-out',
+        'slide-in-right': 'slideInRight 0.25s ease-out',
       },
       keyframes: {
         fadeIn: {
@@ -91,6 +92,10 @@ export default {
         scaleIn: {
           '0%': { opacity: '0', transform: 'scale(0.95)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        slideInRight: {
+          '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(0)' },
         },
       },
     },

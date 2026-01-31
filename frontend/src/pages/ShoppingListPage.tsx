@@ -48,7 +48,7 @@ export function ShoppingListPage() {
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-200 border-t-accent" />
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-accent" />
           </div>
         ) : (
           <ShoppingList

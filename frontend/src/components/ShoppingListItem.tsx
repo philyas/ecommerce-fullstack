@@ -73,7 +73,7 @@ export function ShoppingListItem({
             className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all ${
               item.bought
                 ? 'border-success bg-success text-white'
-                : 'border-zinc-200 bg-white hover:border-label-tertiary'
+                : 'border-slate-200 bg-white hover:border-label-tertiary'
             } ${isUpdating ? 'opacity-50' : ''}`}
             aria-label={item.bought ? 'Als offen markieren' : 'Als erledigt markieren'}
           >
@@ -104,7 +104,7 @@ export function ShoppingListItem({
             {item.quantity}x
           </span>
         ) : (
-          <div className="flex items-center gap-0.5 rounded-lg border border-zinc-200 bg-white p-0.5">
+          <div className="flex items-center gap-0.5 rounded-lg border border-slate-200 bg-white p-0.5">
             <button
               type="button"
               onClick={() => handleQuantityChange(-1)}

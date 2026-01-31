@@ -53,7 +53,7 @@ export function ShoppingList({ items, onToggleBought, onUpdateQuantity, onDelete
             </span>
             Offen
           </h2>
-          <ul className="divide-y divide-zinc-200 overflow-hidden rounded-lg border border-zinc-200 bg-white">
+          <ul className="divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 bg-white">
             {pendingItems.map((item) => (
               <ShoppingListItem
                 key={item._id}
@@ -75,7 +75,7 @@ export function ShoppingList({ items, onToggleBought, onUpdateQuantity, onDelete
             </span>
             Erledigt
           </h2>
-          <ul className="divide-y divide-zinc-200 overflow-hidden rounded-lg border border-zinc-200 bg-white">
+          <ul className="divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 bg-white">
             {boughtItems.map((item) => (
               <ShoppingListItem
                 key={item._id}

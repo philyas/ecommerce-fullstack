@@ -10,7 +10,7 @@ export function AboutPage() {
         </p>
       </header>
 
-      <div className="card divide-y divide-zinc-200">
+      <div className="card divide-y divide-slate-200">
         <div className="p-6">
           <h2 className="text-sm font-medium uppercase tracking-wider text-label-tertiary">
             Beschreibung

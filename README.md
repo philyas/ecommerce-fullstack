@@ -1,4 +1,4 @@
-# ListUp - Full Stack Anwendung
+# Listify - Full Stack Anwendung
 
 Eine einfache Full-Stack Shopping List Anwendung mit React, Express, TypeScript und MongoDB.
 
