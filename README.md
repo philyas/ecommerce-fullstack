@@ -1,4 +1,4 @@
-# Einkaufsliste - Full Stack Anwendung
+# ListUp - Full Stack Anwendung
 
 Eine einfache Full-Stack Shopping List Anwendung mit React, Express, TypeScript und MongoDB.
 
@@ -22,7 +22,8 @@ Eine einfache Full-Stack Shopping List Anwendung mit React, Express, TypeScript 
 ## Voraussetzungen
 
 - [Docker](https://www.docker.com/get-started) (Version 20.10+)
-- [Docker Compose](https://docs.docker.com/compose/install/) (Version 2.0+)
+- [Node.js](https://nodejs.org/) (Version 18+) - fuer lokale Entwicklung
+- npm (kommt mit Node.js)
 
 ## Setup & Installation
 
@@ -36,7 +37,7 @@ cd Ecommerce-Fullstack
 ### 2. Anwendung starten
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 Das startet alle drei Services:
@@ -115,7 +116,7 @@ Ecommerce-Fullstack/
 
 | Methode | Endpunkt | Beschreibung | Request Body |
 |---------|----------|--------------|--------------|
-| GET | `/items` | Alle Einkaufsitems abrufen | - |
+| GET | `/items` | Alle Items abrufen | - |
 | POST | `/items` | Neues Item hinzufügen | `{ name: string, quantity?: number }` |
 | PUT | `/items/:id` | Item aktualisieren | `{ bought?: boolean, quantity?: number }` |
 | DELETE | `/items/:id` | Item löschen | - |
@@ -135,35 +136,62 @@ interface ShoppingItem {
 
 ## Entwicklung
 
+### Option A: Nur Datenbank mit Docker (empfohlen fuer Entwicklung)
+
+Starte nur MongoDB mit Docker und fuehre Frontend/Backend lokal aus:
+
+```bash
+# 1. Nur MongoDB starten
+docker compose up -d mongodb
+
+# 2. Backend starten (in neuem Terminal)
+cd backend
+npm install
+npm start
+
+# 3. Frontend starten (in neuem Terminal)
+cd frontend
+npm install
+npm start
+```
+
+Das Backend laeuft dann auf `http://localhost:3001` und das Frontend auf `http://localhost:5173`.
+
+### Option B: Alles mit Docker
+
+```bash
+docker compose up --build
+```
+
 ### Logs ansehen
 
 ```bash
 # Alle Services
-docker-compose logs -f
+docker compose logs -f
 
 # Nur Backend
-docker-compose logs -f backend
+docker compose logs -f backend
 
 # Nur Frontend
-docker-compose logs -f frontend
+docker compose logs -f frontend
 ```
 
 ### Services neustarten
 
 ```bash
-docker-compose restart
+docker compose restart
 ```
 
 ### Anwendung stoppen
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ### Mit Daten-Löschung stoppen
 
 ```bash
-docker-compose down -v
+docker compose down -v
 ```
 
 ## Externe Bibliotheken
@@ -173,7 +201,7 @@ docker-compose down -v
 
 ## Features
 
-- Produkte zur Einkaufsliste hinzufuegen
+- Produkte zur Liste hinzufuegen
 - Produktmenge anpassen (+/- Steuerung, 1-999)
 - Produkte als "gekauft" markieren (mit Durchstreichung)
 - Produkte loeschen (mit Bestaetigungsdialog)

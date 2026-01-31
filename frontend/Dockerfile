@@ -14,5 +14,5 @@ COPY . .
 # Expose port
 EXPOSE 5173
 
-# Default command (can be overridden in docker-compose)
+# Default command (can be overridden in docker compose)
 CMD ["npm", "run", "dev"]

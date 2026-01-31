@@ -62,45 +62,43 @@ export function ShoppingListItem({
   return (
     <>
       <li
-        className={`group flex items-center gap-4 px-4 py-3.5 transition-colors hover:bg-surface-muted/50 ${
+        className={`grid grid-cols-[auto_1fr_auto_auto] items-center gap-3 px-3 py-2 transition-colors hover:bg-surface-muted/50 sm:gap-4 sm:px-4 ${
           item.bought ? 'bg-surface/50' : ''
         }`}
       >
-        {/* Checkbox */}
         <button
-          type="button"
-          onClick={handleToggle}
-          disabled={isUpdating}
-          className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all ${
-            item.bought
-              ? 'border-success bg-success text-white'
-              : 'border-zinc-200 bg-white hover:border-label-tertiary'
-          } ${isUpdating ? 'opacity-50' : ''}`}
-          aria-label={item.bought ? 'Als offen markieren' : 'Als erledigt markieren'}
-        >
-          {item.bought && (
+            type="button"
+            onClick={handleToggle}
+            disabled={isUpdating}
+            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all ${
+              item.bought
+                ? 'border-success bg-success text-white'
+                : 'border-zinc-200 bg-white hover:border-label-tertiary'
+            } ${isUpdating ? 'opacity-50' : ''}`}
+            aria-label={item.bought ? 'Als offen markieren' : 'Als erledigt markieren'}
+          >
+            {item.bought && (
             <svg
               className="h-3 w-3"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={3}
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-          )}
-        </button>
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={3}
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            )}
+          </button>
 
-        {/* Name */}
         <span
-          className={`min-w-0 flex-1 text-base transition-colors ${
+          className={`min-w-0 truncate text-left text-sm transition-colors sm:text-base ${
             item.bought ? 'text-label-tertiary line-through' : 'text-label-primary'
           }`}
         >
           {item.name}
         </span>
 
-        {/* Quantity */}
+        <div className="flex w-[5.5rem] justify-center sm:w-24">
         {item.bought ? (
           <span className="rounded-md bg-surface-muted px-2.5 py-1 text-sm font-medium tabular-nums text-label-tertiary">
             {item.quantity}x
@@ -138,15 +136,16 @@ export function ShoppingListItem({
             </button>
           </div>
         )}
+        </div>
 
-        {/* Delete */}
-        {!item.bought && (
-          <button
-            type="button"
-            onClick={handleDeleteClick}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-label-quaternary opacity-0 transition-all hover:bg-danger-light hover:text-danger group-hover:opacity-100"
-            aria-label="Loeschen"
-          >
+        <div className="flex w-8 justify-end">
+          {!item.bought && (
+            <button
+              type="button"
+              onClick={handleDeleteClick}
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-label-tertiary transition-colors hover:bg-danger-light hover:text-danger"
+              aria-label="Loeschen"
+            >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -155,7 +154,8 @@ export function ShoppingListItem({
               />
             </svg>
           </button>
-        )}
+          )}
+        </div>
       </li>
 
       <ConfirmModal

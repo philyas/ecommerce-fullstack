@@ -16,7 +16,7 @@ export function AboutPage() {
             Beschreibung
           </h2>
           <p className="mt-3 text-base leading-relaxed text-label-primary">
-            Eine minimalistische Einkaufslisten-App mit modernem Design.
+            Eine minimalistische Shopping-App mit modernem Design.
             Verwalte deine Einkaeufe einfach und effizient.
           </p>
         </div>

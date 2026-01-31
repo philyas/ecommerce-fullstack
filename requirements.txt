@@ -3,7 +3,7 @@
 ## Ziel
 
 Erstelle eine einfache Full Stack Anwendung (React + TypeScript + Express + MongoDB / Mongoose),
-mit der Benutzer Produkte zur Einkaufsliste hinzufuegen, abhaken und loeschen koennen.
+mit der Benutzer Produkte zur Liste hinzufuegen, abhaken und loeschen koennen.
 
 
 ## Funktionale Anforderungen
@@ -31,7 +31,7 @@ mit der Benutzer Produkte zur Einkaufsliste hinzufuegen, abhaken und loeschen ko
 #### Endpunkte
 
 GET /items
-  -> Gibt die Einkaufsliste zurueck
+  -> Gibt die Liste zurueck
 
 POST /items
   -> Fuegt einen neuen Eintrag hinzu

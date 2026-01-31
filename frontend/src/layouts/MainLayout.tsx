@@ -10,7 +10,7 @@ export function MainLayout() {
               to="/"
               className="text-lg font-semibold tracking-tight text-label-primary transition-opacity hover:opacity-70"
             >
-              Einkaufsliste
+              ListUp
             </NavLink>
             <div className="flex items-center gap-1">
               <NavLink
