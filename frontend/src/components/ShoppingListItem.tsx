@@ -62,7 +62,7 @@ export function ShoppingListItem({
   return (
     <>
       <li
-        className={`grid grid-cols-[auto_1fr_auto_auto] items-center gap-3 px-3 py-2 transition-colors hover:bg-surface-muted/50 sm:gap-4 sm:px-4 ${
+        className={`grid grid-cols-[auto_1fr_auto_auto] items-center gap-3 px-3 py-2 transition-all duration-200 hover:bg-surface-muted/50 sm:gap-4 sm:px-4 ${
           item.bought ? 'bg-surface/50' : ''
         }`}
       >
@@ -70,7 +70,7 @@ export function ShoppingListItem({
             type="button"
             onClick={handleToggle}
             disabled={isUpdating}
-            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all ${
+            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all duration-200 ${
               item.bought
                 ? 'border-success bg-success text-white'
                 : 'border-slate-200 bg-white hover:border-label-tertiary'
@@ -79,7 +79,7 @@ export function ShoppingListItem({
           >
             {item.bought && (
             <svg
-              className="h-3 w-3"
+              className="h-3 w-3 animate-scale-in"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth={3}
@@ -91,7 +91,7 @@ export function ShoppingListItem({
           </button>
 
         <span
-          className={`min-w-0 truncate text-left text-sm transition-colors sm:text-base ${
+          className={`min-w-0 truncate text-left text-sm transition-all duration-200 sm:text-base ${
             item.bought ? 'text-label-tertiary line-through' : 'text-label-primary'
           }`}
         >

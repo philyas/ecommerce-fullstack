@@ -44,7 +44,7 @@ export function ShoppingList({ items, onToggleBought, onUpdateQuantity, onDelete
   const boughtItems = items.filter((item) => item.bought);
 
   return (
-    <div className="mt-6 space-y-6">
+    <div className="space-y-6">
       {pendingItems.length > 0 && (
         <section>
           <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-label-tertiary">

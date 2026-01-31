@@ -1,9 +1,15 @@
+import { useState } from 'react';
 import { AddItemForm } from '../components/AddItemForm';
 import { ShoppingList } from '../components/ShoppingList';
+import { Toast } from '../components/Toast';
 import { useItems } from '../hooks/useItems';
 import { pluralize } from '../utils/string';
 
 export function ShoppingListPage() {
+  const [toast, setToast] = useState<{ visible: boolean; message: string }>({
+    visible: false,
+    message: '',
+  });
   const {
     items,
     loading,
@@ -19,49 +25,68 @@ export function ShoppingListPage() {
   const boughtCount = items.filter((i) => i.bought).length;
 
   return (
-    <div className="animate-fade-in">
-      <header className="mb-8">
-        <h1 className="text-3xl font-semibold tracking-tight text-label-primary">
-          Einkaufsliste
-        </h1>
-        <p className="mt-2 text-base text-label-secondary">
+    <div className="flex min-h-0 flex-1 flex-col animate-fade-in">
+      {(!loading || items.length > 0) && (
+        <p className="mb-4 shrink-0 text-base text-label-secondary sm:mb-6">
           {items.length === 0
             ? 'Fuege dein erstes Produkt hinzu'
             : `${pendingCount} offen, ${boughtCount} erledigt`}
         </p>
-      </header>
+      )}
 
-      <div className="card p-6">
-        <AddItemForm onAdd={addItem} />
-
-        {error && (
-          <div className="mt-4 flex items-center justify-between gap-4 rounded-lg bg-danger-light px-4 py-3">
-            <span className="text-sm text-danger">{error}</span>
-            <button
-              onClick={() => setError(null)}
-              className="text-sm font-medium text-danger hover:text-danger-hover transition-colors"
-            >
-              Schliessen
-            </button>
-          </div>
-        )}
-
-        {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-accent" />
-          </div>
-        ) : (
-          <ShoppingList
-            items={items}
-            onToggleBought={toggleBought}
-            onUpdateQuantity={updateQuantity}
-            onDelete={deleteItem}
+      {/* Form + Fehler – außerhalb, nicht scrollbar */}
+      <div className="shrink-0">
+        <div className="card p-6">
+          <AddItemForm
+            onAdd={addItem}
+            onSuccess={(name) => {
+              setToast({ visible: true, message: `"${name}" hinzugefuegt` });
+            }}
           />
-        )}
+
+          {error && (
+            <div className="mt-4 flex items-center justify-between gap-4 rounded-lg bg-danger-light px-4 py-3">
+              <span className="text-sm text-danger">{error}</span>
+              <button
+                onClick={() => setError(null)}
+                className="text-sm font-medium text-danger hover:text-danger-hover transition-colors"
+              >
+                Schliessen
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
+      {/* Nur Produkte – feste Höhe (100vh minus Rest), bei vielen Produkten scrollbar */}
+      <div className="mt-6">
+        <div className="card flex max-h-[36rem] min-h-[12rem] flex-col overflow-hidden" style={{ height: 'min(calc(100vh - 450px), 36rem)' }}>
+          {loading ? (
+            <div className="flex flex-1 items-center justify-center py-12">
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-accent" />
+            </div>
+          ) : (
+            <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">
+              <ShoppingList
+                items={items}
+                onToggleBought={toggleBought}
+                onUpdateQuantity={updateQuantity}
+                onDelete={deleteItem}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      <Toast
+        message={toast.message}
+        visible={toast.visible}
+        onHide={() => setToast((p) => ({ ...p, visible: false }))}
+        duration={1500}
+      />
+
       {items.length > 0 && (
-        <footer className="mt-6 text-center">
+        <footer className="mt-4 shrink-0 text-center sm:mt-6">
           <p className="text-sm text-label-tertiary">
             {items.length} {pluralize(items.length, 'Produkt', 'Produkte')} insgesamt
           </p>

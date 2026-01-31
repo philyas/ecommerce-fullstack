@@ -1,12 +1,22 @@
-import { useState, FormEvent } from 'react';
+import { useState, useRef, useEffect, FormEvent } from 'react';
 
 interface AddItemFormProps {
   onAdd: (name: string) => Promise<void>;
+  onSuccess?: (name: string) => void;
 }
 
-export function AddItemForm({ onAdd }: AddItemFormProps) {
+export function AddItemForm({ onAdd, onSuccess }: AddItemFormProps) {
   const [name, setName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const shouldFocusRef = useRef(false);
+
+  useEffect(() => {
+    if (!isSubmitting && shouldFocusRef.current) {
+      shouldFocusRef.current = false;
+      inputRef.current?.focus();
+    }
+  }, [isSubmitting]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -14,9 +24,11 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
     if (!trimmedName) return;
 
     setIsSubmitting(true);
+    shouldFocusRef.current = true;
     try {
       await onAdd(trimmedName);
       setName('');
+      onSuccess?.(trimmedName);
     } finally {
       setIsSubmitting(false);
     }
@@ -25,12 +37,14 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
       <input
+        ref={inputRef}
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Neues Produkt..."
         disabled={isSubmitting}
         className="input flex-1"
+        autoFocus
       />
       <button
         type="submit"

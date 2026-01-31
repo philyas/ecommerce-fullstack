@@ -12,8 +12,8 @@ export function MainLayout() {
     }`;
 
   return (
-    <div className="min-h-screen bg-surface">
-      <nav className="sticky top-0 z-10 border-b border-slate-200 bg-surface-elevated/80 backdrop-blur-lg">
+    <div className="flex min-h-screen flex-col bg-surface">
+      <nav className="shrink-0 border-b border-slate-200 bg-surface-elevated/80 backdrop-blur-lg">
         <div className="mx-auto max-w-2xl px-6">
           <div className="flex h-16 items-center justify-between">
             <NavLink
@@ -98,7 +98,7 @@ export function MainLayout() {
         </>
       )}
 
-      <main className="mx-auto max-w-2xl px-6 py-10">
+      <main className="mx-auto flex min-h-0 max-w-2xl flex-1 flex-col overflow-hidden px-6 py-6 sm:py-10">
         <Outlet />
       </main>
     </div>
