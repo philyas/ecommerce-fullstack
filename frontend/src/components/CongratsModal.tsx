@@ -1,4 +1,10 @@
-import { useEffect, useRef } from 'react';
+/**
+ * Glückwunsch-Modal nach Abschluss aller Items.
+ * Nutzt useModal Hook für einheitliche Modal-Logik.
+ */
+
+import { useRef } from 'react';
+import { useModal } from '../hooks/useModal';
 
 interface CongratsModalProps {
   isOpen: boolean;
@@ -8,22 +14,11 @@ interface CongratsModalProps {
 export function CongratsModal({ isOpen, onClose }: CongratsModalProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-
-    buttonRef.current?.focus();
-    document.addEventListener('keydown', handleKeyDown);
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [isOpen, onClose]);
+  useModal({
+    isOpen,
+    onClose,
+    focusRef: buttonRef,
+  });
 
   if (!isOpen) return null;
 
@@ -44,17 +39,7 @@ export function CongratsModal({ isOpen, onClose }: CongratsModalProps) {
       >
         <div className="p-6">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-success/15">
-            <svg
-              className="h-8 w-8 text-success"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              viewBox="0 0 24 24"
-            >
-              <path d="M5 13l4 4L19 7" />
-            </svg>
+            <CheckIcon />
           </div>
 
           <h2
@@ -70,7 +55,7 @@ export function CongratsModal({ isOpen, onClose }: CongratsModalProps) {
             id="congrats-description"
             className="mt-3 text-center text-base font-medium text-label-primary"
           >
-          Jetzt heißt es: Focus!
+            Jetzt heißt es: Focus!
           </p>
           <p className="mt-2 text-center text-sm leading-relaxed text-label-secondary">
             Immer drauf lauern und in Stellung gehen, wenn eine neue Kasse aufmacht.
@@ -89,5 +74,25 @@ export function CongratsModal({ isOpen, onClose }: CongratsModalProps) {
         </div>
       </div>
     </div>
+  );
+}
+
+// ============================================================================
+// Icon Components (Private)
+// ============================================================================
+
+function CheckIcon() {
+  return (
+    <svg
+      className="h-8 w-8 text-success"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      viewBox="0 0 24 24"
+    >
+      <path d="M5 13l4 4L19 7" />
+    </svg>
   );
 }

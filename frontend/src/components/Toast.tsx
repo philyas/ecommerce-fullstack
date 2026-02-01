@@ -1,4 +1,9 @@
+/**
+ * Toast-Komponente für temporäre Benachrichtigungen.
+ */
+
 import { useEffect } from 'react';
+import { ANIMATION } from '../constants';
 
 interface ToastProps {
   message: string;
@@ -7,7 +12,12 @@ interface ToastProps {
   duration?: number;
 }
 
-export function Toast({ message, visible, onHide, duration = 1500 }: ToastProps) {
+export function Toast({
+  message,
+  visible,
+  onHide,
+  duration = ANIMATION.TOAST_DURATION,
+}: ToastProps) {
   useEffect(() => {
     if (!visible) return;
 

@@ -1,45 +1,64 @@
+/**
+ * Application Entry Point.
+ * Konfiguriert und startet den Express-Server.
+ */
+
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import itemsRouter from './routes/items.js';
+import { config } from './config/index.js';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/shopping_list';
 
+// ============================================================================
 // Middleware
+// ============================================================================
+
 app.use(cors());
 app.use(express.json());
 
+// ============================================================================
 // Routes
+// ============================================================================
+
 app.use('/items', itemsRouter);
 
-// Health check endpoint
+// Health Check Endpoint
 app.get('/health', (_req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+  });
 });
 
-// Connect to MongoDB and start server
-const startServer = async () => {
+// ============================================================================
+// Server Lifecycle
+// ============================================================================
+
+async function startServer(): Promise<void> {
   try {
     console.log('Connecting to MongoDB...');
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(config.database.uri);
     console.log('Connected to MongoDB successfully');
 
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+    app.listen(config.server.port, () => {
+      console.log(`Server is running on port ${config.server.port}`);
     });
   } catch (error) {
     console.error('Failed to connect to MongoDB:', error);
     process.exit(1);
   }
-};
+}
 
-// Handle graceful shutdown
-process.on('SIGINT', async () => {
+async function shutdown(): Promise<void> {
   console.log('Shutting down gracefully...');
   await mongoose.connection.close();
   process.exit(0);
-});
+}
+
+// Graceful Shutdown Handler
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
 
 startServer();

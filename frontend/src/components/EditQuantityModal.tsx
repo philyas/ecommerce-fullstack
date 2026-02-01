@@ -1,5 +1,13 @@
+/**
+ * Modal zum Bearbeiten der Produktmenge.
+ * Nutzt useModal Hook für einheitliche Modal-Logik.
+ */
+
 import { useEffect, useState } from 'react';
+import { useModal } from '../hooks/useModal';
 import { QuantityStepper } from './QuantityStepper';
+import { LoadingSpinner } from './LoadingSpinner';
+import { VALIDATION, QUANTITY_PRESETS } from '../constants';
 
 interface EditQuantityModalProps {
   isOpen: boolean;
@@ -18,14 +26,15 @@ export function EditQuantityModal({
   currentQuantity,
   onConfirm,
   onClose,
-  min = 1,
-  max = 999,
+  min = VALIDATION.QUANTITY_MIN,
+  max = VALIDATION.QUANTITY_MAX,
   title = 'Menge ändern',
 }: EditQuantityModalProps) {
   const [value, setValue] = useState(currentQuantity);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Reset state when modal opens
   useEffect(() => {
     if (isOpen) {
       setValue(currentQuantity);
@@ -33,30 +42,23 @@ export function EditQuantityModal({
     }
   }, [isOpen, currentQuantity]);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !isLoading) onClose();
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [isOpen, isLoading, onClose]);
+  useModal({
+    isOpen,
+    onClose,
+    isLoading,
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (value < min || value > max) {
       setError(`Bitte eine Zahl zwischen ${min} und ${max} eingeben.`);
       return;
     }
+
     setError(null);
     setIsLoading(true);
+
     try {
       await onConfirm(value);
       onClose();
@@ -100,7 +102,7 @@ export function EditQuantityModal({
                 onChange={setValue}
                 min={min}
                 max={max}
-                presets={[1, 2, 3, 5, 10, 20, 50]}
+                presets={QUANTITY_PRESETS.EDIT_MODAL}
                 size="comfortable"
                 className="justify-center"
                 disabled={isLoading}
@@ -125,30 +127,7 @@ export function EditQuantityModal({
               disabled={isLoading}
               className="btn-primary flex-1 disabled:opacity-50"
             >
-              {isLoading ? (
-                <svg
-                  className="h-5 w-5 animate-spin"
-                  viewBox="0 0 24 24"
-                  aria-hidden
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-              ) : (
-                'Übernehmen'
-              )}
+              {isLoading ? <LoadingSpinner /> : 'Übernehmen'}
             </button>
           </div>
         </form>
