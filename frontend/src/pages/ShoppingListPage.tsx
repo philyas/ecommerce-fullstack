@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { AddItemForm } from '../components/AddItemForm';
+import { ConfirmModal } from '../components/ConfirmModal';
 import { CongratsModal } from '../components/CongratsModal';
 import { ShoppingList } from '../components/ShoppingList';
 import { Toast } from '../components/Toast';
@@ -12,6 +13,8 @@ export function ShoppingListPage() {
     message: '',
   });
   const [showCongratsModal, setShowCongratsModal] = useState(false);
+  const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
+  const [isDeletingAll, setIsDeletingAll] = useState(false);
   const prevPendingCountRef = useRef<number | undefined>(undefined);
 
   const {
@@ -23,6 +26,7 @@ export function ShoppingListPage() {
     toggleBought,
     updateQuantity,
     deleteItem,
+    deleteAll,
   } = useItems();
 
   const pendingCount = items.filter((i) => !i.bought).length;
@@ -46,7 +50,7 @@ export function ShoppingListPage() {
       {(!loading || items.length > 0) && (
         <p className="mb-4 shrink-0 text-base text-label-secondary sm:mb-6">
           {items.length === 0
-            ? 'Fuege dein erstes Produkt hinzu'
+            ? 'Füge dein erstes Produkt hinzu'
             : `${pendingCount} offen, ${boughtCount} erledigt`}
         </p>
       )}
@@ -57,7 +61,7 @@ export function ShoppingListPage() {
           <AddItemForm
             onAdd={addItem}
             onSuccess={(name) => {
-              setToast({ visible: true, message: `"${name}" hinzugefuegt` });
+              setToast({ visible: true, message: `"${name}" hinzugefügt` });
             }}
           />
 
@@ -68,7 +72,7 @@ export function ShoppingListPage() {
                 onClick={() => setError(null)}
                 className="text-sm font-medium text-danger hover:text-danger-hover transition-colors"
               >
-                Schliessen
+                Schließen
               </button>
             </div>
           )}
@@ -78,6 +82,21 @@ export function ShoppingListPage() {
       {/* Nur Produkte – feste Höhe (100vh minus Rest), bei vielen Produkten scrollbar */}
       <div className="mt-6">
         <div className="card flex max-h-[36rem] min-h-[12rem] flex-col overflow-hidden" style={{ height: 'min(calc(100vh - 450px), 36rem)' }}>
+          {items.length > 0 && !loading && (
+            <div className="flex shrink-0 items-center justify-end border-b border-slate-200 bg-surface-muted/30 px-4 py-3 sm:px-6">
+              <button
+                type="button"
+                onClick={() => setShowDeleteAllConfirm(true)}
+                className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-danger transition-colors hover:bg-danger-light hover:text-danger-hover"
+                aria-label="Alle Einträge löschen"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Alle löschen
+              </button>
+            </div>
+          )}
           {loading ? (
             <div className="flex flex-1 items-center justify-center py-12">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-accent" />
@@ -94,6 +113,26 @@ export function ShoppingListPage() {
           )}
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={showDeleteAllConfirm}
+        title="Alle Einträge löschen?"
+        message="Diese Aktion löscht alle Produkte aus deiner Liste. Das lässt sich nicht rückgängig machen."
+        confirmLabel="Alle löschen"
+        cancelLabel="Abbrechen"
+        isLoading={isDeletingAll}
+        onConfirm={async () => {
+          setIsDeletingAll(true);
+          try {
+            await deleteAll();
+            setShowDeleteAllConfirm(false);
+            setToast({ visible: true, message: 'Liste geleert' });
+          } finally {
+            setIsDeletingAll(false);
+          }
+        }}
+        onCancel={() => !isDeletingAll && setShowDeleteAllConfirm(false)}
+      />
 
       <Toast
         message={toast.message}

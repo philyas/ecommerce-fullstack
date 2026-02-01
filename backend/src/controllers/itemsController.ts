@@ -78,6 +78,16 @@ export const itemsController = {
     }
   },
 
+  async deleteAll(_req: Request, res: Response): Promise<void> {
+    try {
+      const { deletedCount } = await itemsService.deleteAll();
+      res.json({ message: 'All items deleted successfully', deletedCount });
+    } catch (error) {
+      console.error('Error deleting all items:', error);
+      sendError(res, 'Failed to delete all items');
+    }
+  },
+
   async delete(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;

@@ -29,4 +29,9 @@ export const itemsService = {
   async deleteById(id: string): Promise<IShoppingItemDocument | null> {
     return ShoppingItem.findByIdAndDelete(id);
   },
+
+  async deleteAll(): Promise<{ deletedCount: number }> {
+    const result = await ShoppingItem.deleteMany({});
+    return { deletedCount: result.deletedCount };
+  },
 };

@@ -72,6 +72,17 @@ export function useItems() {
     }
   }, []);
 
+  const deleteAll = useCallback(async () => {
+    try {
+      setError(null);
+      await itemsApi.deleteAll();
+      setItems([]);
+    } catch (err) {
+      setError(getErrorMessage(err) || 'Fehler beim Löschen aller Einträge');
+      throw err;
+    }
+  }, []);
+
   return {
     items,
     loading,
@@ -81,6 +92,7 @@ export function useItems() {
     toggleBought,
     updateQuantity,
     deleteItem,
+    deleteAll,
     refetch: fetchItems,
   };
 }

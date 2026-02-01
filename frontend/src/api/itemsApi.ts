@@ -8,4 +8,6 @@ export const itemsApi = {
   update: (id: string, data: UpdateItemRequest) =>
     api.put<ShoppingItem>(`/items/${id}`, data),
   delete: (id: string) => api.delete<{ message: string; item: ShoppingItem }>(`/items/${id}`),
+  deleteAll: () =>
+    api.delete<{ message: string; deletedCount: number }>('/items/clear'),
 };

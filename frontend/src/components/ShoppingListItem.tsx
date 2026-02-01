@@ -173,7 +173,7 @@ export function ShoppingListItem({
               onClick={() => handleQuantityChange(1)}
               disabled={isUpdatingQuantity || item.quantity >= 999}
               className="flex h-7 w-7 items-center justify-center rounded-md text-label-secondary transition-colors hover:bg-surface-muted hover:text-label-primary disabled:cursor-not-allowed disabled:opacity-40"
-              aria-label="Menge erhoehen"
+              aria-label="Menge erhöhen"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -189,7 +189,7 @@ export function ShoppingListItem({
               type="button"
               onClick={handleDeleteClick}
               className="flex h-8 w-8 items-center justify-center rounded-lg text-label-tertiary transition-colors hover:bg-danger-light hover:text-danger"
-              aria-label="Loeschen"
+              aria-label="Löschen"
             >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path

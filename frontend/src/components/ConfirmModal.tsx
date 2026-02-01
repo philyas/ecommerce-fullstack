@@ -15,7 +15,7 @@ export function ConfirmModal({
   isOpen,
   title,
   message,
-  confirmLabel = 'Loeschen',
+  confirmLabel = 'Löschen',
   cancelLabel = 'Abbrechen',
   isLoading = false,
   onConfirm,

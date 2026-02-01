@@ -43,7 +43,7 @@ export function MainLayout() {
               type="button"
               onClick={() => setMenuOpen(true)}
               className="flex h-10 w-10 items-center justify-center rounded-lg text-label-primary hover:bg-surface-muted sm:hidden"
-              aria-label="Menue oeffnen"
+              aria-label="Menü öffnen"
             >
               <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -71,7 +71,7 @@ export function MainLayout() {
                 type="button"
                 onClick={() => setMenuOpen(false)}
                 className="flex h-10 w-10 items-center justify-center rounded-lg text-label-secondary hover:bg-surface-muted"
-                aria-label="Menue schliessen"
+                aria-label="Menü schließen"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

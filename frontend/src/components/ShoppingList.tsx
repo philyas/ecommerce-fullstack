@@ -34,7 +34,7 @@ export function ShoppingList({ items, onToggleBought, onUpdateQuantity, onDelete
           Liste ist leer
         </p>
         <p className="mt-1 text-sm text-label-tertiary">
-          Fuege oben ein Produkt hinzu
+          Füge oben ein Produkt hinzu
         </p>
       </div>
     );
