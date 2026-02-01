@@ -1,13 +1,13 @@
 # Listify - Full Stack Anwendung
 
-Eine einfache Full-Stack Shopping List Anwendung mit React, Express, TypeScript und MongoDB.
+Eine Full-Stack Shopping-List-Anwendung mit React, Express, TypeScript und MongoDB. Die Codebasis folgt Clean Code, SOLID-Prinzipien und Clean-Architecture-Grundsätzen.
 
 ## Technologie-Stack
 
 ### Frontend
 - **React 18** mit TypeScript
 - **Vite** als Build-Tool
-- **Tailwind CSS** für das Styling (externe UI-Bibliothek)
+- **Tailwind CSS** für das Styling
 
 ### Backend
 - **Express.js** mit TypeScript
@@ -22,7 +22,7 @@ Eine einfache Full-Stack Shopping List Anwendung mit React, Express, TypeScript 
 ## Voraussetzungen
 
 - [Docker](https://www.docker.com/get-started) (Version 20.10+)
-- [Node.js](https://nodejs.org/) (Version 18+) - fuer lokale Entwicklung
+- [Node.js](https://nodejs.org/) (Version 18+) – für lokale Entwicklung
 - npm (kommt mit Node.js)
 
 ## Setup & Installation
@@ -65,14 +65,21 @@ Ecommerce-Fullstack/
 │   ├── tsconfig.json
 │   └── src/
 │       ├── index.ts
+│       ├── config/
+│       │   └── index.ts           # Zentralisierte Konfiguration
+│       ├── types/
+│       │   └── index.ts            # DTOs, Interfaces (Dependency Inversion)
+│       ├── middleware/
+│       │   ├── index.ts
+│       │   └── validation.ts       # Request-Validierung (SRP)
 │       ├── controllers/
 │       │   └── itemsController.ts
 │       ├── services/
-│       │   └── itemsService.ts
-│       ├── routes/
-│       │   └── items.ts
+│       │   └── itemsService.ts    # Business-Logik, IItemsService
 │       ├── models/
 │       │   └── ShoppingItem.ts
+│       ├── routes/
+│       │   └── items.ts
 │       └── utils/
 │           ├── index.ts
 │           ├── validation.ts
@@ -92,12 +99,16 @@ Ecommerce-Fullstack/
         ├── api/
         │   ├── client.ts
         │   └── itemsApi.ts
+        ├── constants/
+        │   └── index.ts            # Zentrale Konstanten (keine Magic Numbers)
         ├── utils/
         │   ├── index.ts
         │   ├── string.ts
         │   └── error.ts
         ├── hooks/
-        │   └── useItems.ts
+        │   ├── index.ts
+        │   ├── useItems.ts
+        │   └── useModal.ts         # Gemeinsame Modal-Logik (DRY)
         ├── layouts/
         │   └── MainLayout.tsx
         ├── pages/
@@ -106,20 +117,35 @@ Ecommerce-Fullstack/
         ├── types/
         │   └── index.ts
         └── components/
+            ├── index.ts
             ├── AddItemForm.tsx
             ├── ConfirmModal.tsx
+            ├── CongratsModal.tsx
+            ├── EditQuantityModal.tsx
+            ├── LoadingSpinner.tsx  # Wiederverwendbarer Spinner
+            ├── QuantityStepper.tsx
             ├── ShoppingList.tsx
-            └── ShoppingListItem.tsx
+            ├── ShoppingListItem.tsx
+            └── Toast.tsx
 ```
+
+## Architektur (Clean Code / SOLID / Clean Architecture)
+
+- **Backend**: Controller → Middleware (Validierung) → Service (Interface) → Model. Konfiguration und Types zentral.
+- **Frontend**: Konstanten und Types zentral, `useModal` und `LoadingSpinner` für DRY, Sub-Komponenten für SRP.
+- **SOLID**: Service-Interface (D), Validierung in Middleware (S), kleine fokussierte Interfaces (I).
 
 ## API Endpunkte
 
-| Methode | Endpunkt | Beschreibung | Request Body |
-|---------|----------|--------------|--------------|
-| GET | `/items` | Alle Items abrufen | - |
-| POST | `/items` | Neues Item hinzufügen | `{ name: string, quantity?: number }` |
-| PUT | `/items/:id` | Item aktualisieren | `{ bought?: boolean, quantity?: number }` |
-| DELETE | `/items/:id` | Item löschen | - |
+| Methode | Endpunkt       | Beschreibung           | Request Body |
+|--------|----------------|------------------------|--------------|
+| GET    | `/items`       | Alle Items abrufen     | –            |
+| POST   | `/items`       | Neues Item hinzufügen | `{ name: string, quantity?: number }` |
+| PUT    | `/items/:id`   | Item aktualisieren     | `{ bought?: boolean, quantity?: number }` |
+| DELETE | `/items/clear` | Alle Items löschen     | –            |
+| DELETE | `/items/:id`   | Einzelnes Item löschen | –            |
+
+**Health Check:** `GET /health` – liefert `{ status: "ok", timestamp: string }`.
 
 ## MongoDB Datenmodell
 
@@ -127,7 +153,7 @@ Ecommerce-Fullstack/
 interface ShoppingItem {
   _id: ObjectId;
   name: string;
-  quantity: number;  // Menge (1-999)
+  quantity: number;  // 1–999
   bought: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -136,9 +162,9 @@ interface ShoppingItem {
 
 ## Entwicklung
 
-### Option A: Nur Datenbank mit Docker (empfohlen fuer Entwicklung)
+### Option A: Nur Datenbank mit Docker (empfohlen für Entwicklung)
 
-Starte nur MongoDB mit Docker und fuehre Frontend/Backend lokal aus:
+Starte nur MongoDB mit Docker und führe Frontend/Backend lokal aus:
 
 ```bash
 # 1. Nur MongoDB starten
@@ -155,7 +181,7 @@ npm install
 npm start
 ```
 
-Das Backend laeuft dann auf `http://localhost:3001` und das Frontend auf `http://localhost:5173`.
+Das Backend läuft dann auf `http://localhost:3001`, das Frontend auf `http://localhost:5173`.
 
 ### Option B: Alles mit Docker
 
@@ -194,30 +220,28 @@ docker compose down
 docker compose down -v
 ```
 
-## Externe Bibliotheken
-
-### Frontend
-- **Tailwind CSS** - Utility-first CSS Framework für schnelles und modernes Styling
-
 ## Features
 
-- Produkte zur Liste hinzufuegen
-- Produktmenge anpassen (+/- Steuerung, 1-999)
-- Produkte als "gekauft" markieren (mit Durchstreichung)
-- Produkte loeschen (mit Bestaetigungsdialog)
-- Uebersichtliche Trennung zwischen "Zu kaufen" und "Gekauft"
-- Responsive Design fuer Mobile und Desktop
-- Loading-States und Error-Handling
+- Produkte zur Liste hinzufügen (Name + Menge 1–999)
+- Produktmenge anpassen (+/- Stepper, Modal für direkte Eingabe)
+- Produkte als „gekauft“ markieren (mit Check-Animation)
+- Einzelne Produkte löschen (mit Bestätigungsdialog)
+- Alle Produkte löschen („Alle löschen“ mit Bestätigung)
+- Übersichtliche Trennung zwischen „Offen“ und „Erledigt“
+- Glückwunsch-Modal, wenn alle Items erledigt sind
+- Toast-Benachrichtigungen bei Aktionen
+- Responsive Design für Mobile und Desktop
+- Loading-States und zentrales Error-Handling
 
 ## Screenshots
 
 Die Anwendung bietet:
-- Ein modernes, ansprechendes Design mit Gradient-Hintergrund
-- Ein Eingabefeld mit Button zum Hinzufügen neuer Produkte
-- Eine übersichtliche Liste mit Checkbox und Lösch-Button
+- Ein modernes, ansprechendes Design mit klarem Layout
+- Ein Eingabefeld mit Mengen-Stepper und Button zum Hinzufügen
+- Eine übersichtliche Liste mit Checkbox, Mengen-Stepper und Lösch-Button
 - Visuelle Unterscheidung zwischen gekauften und nicht-gekauften Items
+- Modals für Bestätigung und Mengen-Eingabe
 
 ---
 
-Erstellt als Full Stack Test Aufgabe.
-# ecommerce-fullstack
+Erstellt als Full-Stack-Testaufgabe.
