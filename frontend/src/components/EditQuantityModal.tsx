@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { QuantityStepper } from './QuantityStepper';
 
 interface EditQuantityModalProps {
   isOpen: boolean;
@@ -6,6 +7,9 @@ interface EditQuantityModalProps {
   currentQuantity: number;
   onConfirm: (quantity: number) => Promise<void>;
   onClose: () => void;
+  min?: number;
+  max?: number;
+  title?: string;
 }
 
 export function EditQuantityModal({
@@ -14,18 +18,18 @@ export function EditQuantityModal({
   currentQuantity,
   onConfirm,
   onClose,
+  min = 1,
+  max = 999,
+  title = 'Menge ändern',
 }: EditQuantityModalProps) {
-  const [value, setValue] = useState(String(currentQuantity));
+  const [value, setValue] = useState(currentQuantity);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isOpen) {
-      setValue(String(currentQuantity));
+      setValue(currentQuantity);
       setError(null);
-      const t = requestAnimationFrame(() => inputRef.current?.focus());
-      return () => cancelAnimationFrame(t);
     }
   }, [isOpen, currentQuantity]);
 
@@ -47,15 +51,14 @@ export function EditQuantityModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const num = parseInt(value, 10);
-    if (Number.isNaN(num) || num < 1 || num > 999) {
-      setError('Bitte eine Zahl zwischen 1 und 999 eingeben.');
+    if (value < min || value > max) {
+      setError(`Bitte eine Zahl zwischen ${min} und ${max} eingeben.`);
       return;
     }
     setError(null);
     setIsLoading(true);
     try {
-      await onConfirm(num);
+      await onConfirm(value);
       onClose();
     } finally {
       setIsLoading(false);
@@ -84,28 +87,26 @@ export function EditQuantityModal({
               id="quantity-modal-title"
               className="text-center text-lg font-semibold text-label-primary"
             >
-              Menge ändern
+              {title}
             </h2>
-            <p className="mt-1 text-center text-sm text-label-secondary">
-              {itemName}
-            </p>
-            <div className="mt-4">
-              <input
-                ref={inputRef}
-                type="number"
-                min={1}
-                max={999}
+            {itemName && (
+              <p className="mt-1 text-center text-sm text-label-secondary">
+                {itemName}
+              </p>
+            )}
+            <div className="mt-5 flex flex-col items-center gap-4">
+              <QuantityStepper
                 value={value}
-                onChange={(e) => {
-                  setValue(e.target.value);
-                  setError(null);
-                }}
+                onChange={setValue}
+                min={min}
+                max={max}
+                presets={[1, 2, 3, 5, 10, 20, 50]}
+                size="comfortable"
+                className="justify-center"
                 disabled={isLoading}
-                className="input text-center text-lg tabular-nums"
-                aria-label="Menge"
               />
               {error && (
-                <p className="mt-2 text-center text-sm text-danger">{error}</p>
+                <p className="text-center text-sm text-danger">{error}</p>
               )}
             </div>
           </div>

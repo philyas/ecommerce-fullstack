@@ -1,14 +1,19 @@
 import { useState, useRef, useEffect, FormEvent } from 'react';
+import { EditQuantityModal } from './EditQuantityModal';
+import { QuantityStepper } from './QuantityStepper';
 
 interface AddItemFormProps {
-  onAdd: (name: string) => Promise<void>;
-  onSuccess?: (name: string) => void;
+  onAdd: (name: string, quantity?: number) => Promise<void>;
+  onSuccess?: (name: string, quantity?: number) => void;
 }
 
 export function AddItemForm({ onAdd, onSuccess }: AddItemFormProps) {
   const [name, setName] = useState('');
+  const [quantity, setQuantity] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showQuantityModal, setShowQuantityModal] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const quantityInputRef = useRef<HTMLInputElement>(null);
   const shouldFocusRef = useRef(false);
 
   useEffect(() => {
@@ -26,30 +31,60 @@ export function AddItemForm({ onAdd, onSuccess }: AddItemFormProps) {
     setIsSubmitting(true);
     shouldFocusRef.current = true;
     try {
-      await onAdd(trimmedName);
+      await onAdd(trimmedName, quantity);
       setName('');
-      onSuccess?.(trimmedName);
+      setQuantity(1);
+      onSuccess?.(trimmedName, quantity);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
+    <form onSubmit={handleSubmit} className="flex w-full flex-col gap-3 sm:flex-row sm:flex-nowrap sm:items-center sm:gap-3">
+      {/* Produktname – Enter springt ins Mengenfeld */}
       <input
         ref={inputRef}
         type="text"
+        inputMode="text"
+        autoComplete="off"
         value={name}
         onChange={(e) => setName(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            quantityInputRef.current?.focus();
+          }
+        }}
         placeholder="Neues Produkt..."
         disabled={isSubmitting}
-        className="input flex-1"
+        className="input min-w-0 flex-1"
         autoFocus
+        aria-label="Produktname"
       />
+      {/* Menge */}
+      <div className="flex items-center justify-between gap-3 sm:justify-start sm:shrink-0">
+        <span className="text-sm font-medium text-label-secondary sm:sr-only">
+          Menge
+        </span>
+        <QuantityStepper
+          inputRef={quantityInputRef}
+          value={quantity}
+          onChange={setQuantity}
+          min={1}
+          max={99}
+          presets={[]}
+          size="comfortable"
+          className="flex-1 sm:flex-initial"
+          disabled={isSubmitting}
+          onMobileNumberTap={() => setShowQuantityModal(true)}
+        />
+      </div>
       <button
         type="submit"
         disabled={isSubmitting || !name.trim()}
-        className="btn-primary w-full px-6 sm:w-auto disabled:cursor-not-allowed disabled:opacity-50"
+        className="btn-primary order-last w-full shrink-0 px-6 sm:order-none sm:w-auto disabled:cursor-not-allowed disabled:opacity-50"
+        aria-label={quantity > 1 ? `${quantity}x hinzufügen` : 'Hinzufügen'}
       >
         {isSubmitting ? (
           <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" aria-hidden>
@@ -80,6 +115,17 @@ export function AddItemForm({ onAdd, onSuccess }: AddItemFormProps) {
           </svg>
         )}
       </button>
+
+      <EditQuantityModal
+        isOpen={showQuantityModal}
+        itemName=""
+        title="Menge eingeben"
+        currentQuantity={quantity}
+        onConfirm={async (q) => setQuantity(q)}
+        onClose={() => setShowQuantityModal(false)}
+        min={1}
+        max={99}
+      />
     </form>
   );
 }

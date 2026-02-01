@@ -24,10 +24,10 @@ export function useItems() {
     fetchItems();
   }, [fetchItems]);
 
-  const addItem = useCallback(async (name: string) => {
+  const addItem = useCallback(async (name: string, quantity?: number) => {
     try {
       setError(null);
-      const newItem = await itemsApi.create(name);
+      const newItem = await itemsApi.create(name, quantity);
       setItems((prev) => [newItem, ...prev]);
     } catch (err) {
       setError(getErrorMessage(err) || 'Failed to add item');

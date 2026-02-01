@@ -57,11 +57,15 @@ export function ShoppingListPage() {
 
       {/* Form + Fehler – außerhalb, nicht scrollbar */}
       <div className="shrink-0">
-        <div className="card p-6">
+        <div className="card p-4 sm:p-6">
           <AddItemForm
             onAdd={addItem}
-            onSuccess={(name) => {
-              setToast({ visible: true, message: `"${name}" hinzugefügt` });
+            onSuccess={(name, quantity) => {
+              const msg =
+                quantity && quantity > 1
+                  ? `"${name}" (${quantity}×) hinzugefügt`
+                  : `"${name}" hinzugefügt`;
+              setToast({ visible: true, message: msg });
             }}
           />
 
@@ -81,7 +85,7 @@ export function ShoppingListPage() {
 
       {/* Nur Produkte – feste Höhe (100vh minus Rest), bei vielen Produkten scrollbar */}
       <div className="mt-6">
-        <div className="card flex max-h-[36rem] min-h-[12rem] flex-col overflow-hidden" style={{ height: 'min(calc(100vh - 450px), 36rem)' }}>
+        <div className="card flex min-h-[12rem] flex-col overflow-hidden" style={{ height: 'min(calc(100vh - 380px), 42rem)' }}>
           {items.length > 0 && !loading && (
             <div className="flex shrink-0 items-center justify-end border-b border-slate-200 bg-surface-muted/30 px-4 py-3 sm:px-6">
               <button

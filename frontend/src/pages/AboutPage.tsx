@@ -6,7 +6,7 @@ const manualSteps = [
       </svg>
     ),
     title: 'Produkt hinzufügen',
-    text: 'Oben im Eingabefeld Namen eintippen und auf „Hinzufügen“ klicken (oder Enter).',
+    text: 'Namen eintippen, optional Menge mit −/+ oder direkt eintippen anpassen, dann „Hinzufügen" klicken oder Enter drücken.',
   },
   {
     icon: (
@@ -24,14 +24,7 @@ const manualSteps = [
       </svg>
     ),
     title: 'Menge verringern / erhöhen',
-    text: 'Mit den Buttons − und + neben der Menge die Anzahl anpassen (1–999).',
-  },
-  {
-    icon: (
-      <span className="flex h-5 w-5 shrink-0 items-center justify-center text-sm font-medium tabular-nums">3</span>
-    ),
-    title: 'Menge direkt eingeben',
-    text: 'Auf die Zahl in der Mitte tippen – es öffnet sich ein Fenster, in dem du die Menge eintippen kannst.',
+    text: 'Mit den Buttons − und + oder mit Pfeiltasten (oben/unten) im Mengenfeld. Oder auf die Zahl in der Liste tippen – es öffnet sich ein Fenster.',
   },
   {
     icon: (
@@ -40,7 +33,22 @@ const manualSteps = [
       </svg>
     ),
     title: 'Produkt löschen',
-    text: 'Auf den Papierkorb rechts tippen. Es erscheint eine Abfrage – mit „Entfernen“ bestätigen.',
+    text: 'Auf den Papierkorb rechts tippen. Es erscheint eine Abfrage – mit „Entfernen" bestätigen.',
+  },
+];
+
+const quickTips = [
+  {
+    title: 'Desktop – schnellster Workflow',
+    text: 'Produktname tippen → Enter (springt ins Mengenfeld) → Pfeil hoch/unten für Menge → Enter zum Hinzufügen. So fügst du ein Produkt ohne Maus hinzu.',
+  },
+  {
+    title: 'Desktop – Menge direkt ändern',
+    text: 'Im Mengenfeld wird die Zahl bei Fokus automatisch markiert. Du kannst eine neue Zahl eintippen, sie ersetzt die alte sofort.',
+  },
+  {
+    title: 'Mobil – ohne Tastatur für die Menge',
+    text: '−/+ nutzen statt die Bildschirmtastatur zu öffnen. Nur beim Produktnamen muss getippt werden.',
   },
 ];
 
@@ -78,6 +86,25 @@ export function AboutPage() {
               </li>
             ))}
           </ul>
+      </div>
+
+      <div className="card mt-6 p-6">
+        <h2 className="text-sm font-medium uppercase tracking-wider text-label-tertiary">
+          Am schnellsten & effektivsten
+        </h2>
+        <p className="mt-2 text-sm text-label-secondary">
+          So nutzt du die App am effektivsten:
+        </p>
+        <ul className="mt-4 space-y-4">
+          {quickTips.map((tip, i) => (
+            <li key={i} className="rounded-lg bg-accent-subtle/50 px-4 py-3">
+              <h3 className="font-medium text-label-primary">{tip.title}</h3>
+              <p className="mt-1 text-sm leading-relaxed text-label-secondary">
+                {tip.text}
+              </p>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

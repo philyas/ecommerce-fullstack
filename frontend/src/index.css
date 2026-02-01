@@ -33,6 +33,12 @@
     outline: 2px solid #0080FF;
     outline-offset: 2px;
   }
+
+  /* Entfernt 300ms Tap-Verzögerung auf Mobile für schnellere Interaktion */
+  button,
+  [role="button"] {
+    touch-action: manipulation;
+  }
 }
 
 @layer components {
