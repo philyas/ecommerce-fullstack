@@ -16,3 +16,15 @@ export interface UpdateItemRequest {
   bought?: boolean;
   quantity?: number;
 }
+
+/** Response von DELETE /items/:id */
+export interface DeleteItemResponse {
+  message: string;
+  item: ShoppingItem;
+}
+
+/** Response von DELETE /items/clear */
+export interface DeleteAllResponse {
+  message: string;
+  deletedCount: number;
+}

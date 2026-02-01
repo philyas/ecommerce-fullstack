@@ -1,10 +1,7 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+import { API_BASE_URL } from '../constants';
 
-async function request<T>(
-  path: string,
-  options?: RequestInit
-): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`, {
+async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -13,7 +10,10 @@ async function request<T>(
   });
 
   if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
+    const body = await response.json().catch(() => ({}));
+    const message =
+      typeof body?.error === 'string' ? body.error : `Request failed: ${response.status}`;
+    throw new Error(message);
   }
 
   return response.json();

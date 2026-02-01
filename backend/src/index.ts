@@ -7,6 +7,7 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import itemsRouter from './routes/items.js';
+import { errorHandler } from './middleware/errorHandler.js';
 import { config } from './config/index.js';
 
 const app = express();
@@ -31,6 +32,12 @@ app.get('/health', (_req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+// ============================================================================
+// Global Error Handler (nach allen Routes)
+// ============================================================================
+
+app.use(errorHandler);
 
 // ============================================================================
 // Server Lifecycle

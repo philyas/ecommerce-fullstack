@@ -1,5 +1,10 @@
 import { api } from './client';
-import type { ShoppingItem, UpdateItemRequest } from '../types';
+import type {
+  ShoppingItem,
+  UpdateItemRequest,
+  DeleteItemResponse,
+  DeleteAllResponse,
+} from '../types';
 
 export const itemsApi = {
   getAll: () => api.get<ShoppingItem[]>('/items'),
@@ -7,7 +12,6 @@ export const itemsApi = {
     api.post<ShoppingItem>('/items', { name, quantity }),
   update: (id: string, data: UpdateItemRequest) =>
     api.put<ShoppingItem>(`/items/${id}`, data),
-  delete: (id: string) => api.delete<{ message: string; item: ShoppingItem }>(`/items/${id}`),
-  deleteAll: () =>
-    api.delete<{ message: string; deletedCount: number }>('/items/clear'),
+  delete: (id: string) => api.delete<DeleteItemResponse>(`/items/${id}`),
+  deleteAll: () => api.delete<DeleteAllResponse>('/items/clear'),
 };
