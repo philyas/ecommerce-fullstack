@@ -1,6 +1,6 @@
 # Listify - Full Stack Anwendung
 
-Eine Full-Stack Shopping-List-Anwendung mit React, Express, TypeScript und MongoDB. Die Codebasis folgt Clean Code, SOLID-Prinzipien und Clean-Architecture-Grundsätzen.
+Eine Full-Stack Shopping-List-Anwendung mit React, Express, TypeScript und MongoDB.
 
 ## Technologie-Stack
 
@@ -21,9 +21,8 @@ Eine Full-Stack Shopping-List-Anwendung mit React, Express, TypeScript und Mongo
 
 ## Voraussetzungen
 
-- [Docker](https://www.docker.com/get-started) (Version 20.10+)
-- [Node.js](https://nodejs.org/) (Version 18+) – für lokale Entwicklung
-- npm (kommt mit Node.js)
+- [Node.js](https://nodejs.org/) (Version 18+) und npm – für lokale Installation und Start
+- Optional: [Docker](https://www.docker.com/get-started) (Version 20.10+) – für Datenbank oder kompletten Stack in Containern
 
 ## Setup & Installation
 
@@ -36,6 +35,12 @@ cd Ecommerce-Fullstack
 
 ### 2. Anwendung starten
 
+Du kannst **mit Docker** (alles in Containern) oder **ohne Docker** (Frontend und Backend lokal installieren und starten) arbeiten.
+
+---
+
+#### Variante A: Alles mit Docker
+
 ```bash
 docker compose up --build
 ```
@@ -45,9 +50,53 @@ Das startet alle drei Services:
 - **Backend** auf Port `3001`
 - **Frontend** auf Port `5173`
 
+---
+
+#### Variante B: Ohne Docker – Frontend und Backend lokal
+
+Frontend und Backend werden lokal mit Node.js installiert und gestartet. Die Datenbank kannst du **entweder** lokal installieren **oder** nur MongoDB per Docker laufen lassen.
+
+**Schritt 1 – Datenbank (eine der beiden Optionen):**
+
+- **Option 1 – Nur MongoDB mit Docker (empfohlen):**  
+  ```bash
+  docker compose up -d mongodb
+  ```  
+  MongoDB läuft dann auf `localhost:27017`. Backend und Frontend laufen weiter auf deinem Rechner.
+
+- **Option 2 – MongoDB lokal:**  
+  MongoDB (z. B. Version 7) lokal installieren und starten, sodass es unter `localhost:27017` erreichbar ist.
+
+**Schritt 2 – Backend installieren und starten**
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+Backend läuft auf `http://localhost:3001` und verbindet sich mit MongoDB unter `localhost:27017` (oder mit `MONGODB_URI` aus der Umgebung).
+
+**Schritt 3 – Frontend installieren und starten** (in neuem Terminal)
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+Frontend läuft auf `http://localhost:5173` und spricht mit dem Backend unter `http://localhost:3001` (oder `VITE_API_URL`).
+
+**Umgebungsvariablen (optional):**
+
+- Backend: `PORT`, `MONGODB_URI` (Standard: `mongodb://localhost:27017/shopping_list`)
+- Frontend: `VITE_API_URL` (Standard: `http://localhost:3001`)
+
+---
+
 ### 3. Anwendung öffnen
 
-Öffne deinen Browser und navigiere zu:
+Im Browser:
 
 ```
 http://localhost:5173
@@ -162,34 +211,10 @@ interface ShoppingItem {
 
 ## Entwicklung
 
-### Option A: Nur Datenbank mit Docker (empfohlen für Entwicklung)
+- **Ohne Docker:** Siehe **Setup & Installation → Variante B** (MongoDB optional mit `docker compose up -d mongodb`, Backend und Frontend lokal mit `npm install` und `npm start`).
+- **Alles mit Docker:** `docker compose up --build` (siehe **Variante A** oben).
 
-Starte nur MongoDB mit Docker und führe Frontend/Backend lokal aus:
-
-```bash
-# 1. Nur MongoDB starten
-docker compose up -d mongodb
-
-# 2. Backend starten (in neuem Terminal)
-cd backend
-npm install
-npm start
-
-# 3. Frontend starten (in neuem Terminal)
-cd frontend
-npm install
-npm start
-```
-
-Das Backend läuft dann auf `http://localhost:3001`, das Frontend auf `http://localhost:5173`.
-
-### Option B: Alles mit Docker
-
-```bash
-docker compose up --build
-```
-
-### Logs ansehen
+### Logs ansehen (nur bei Docker)
 
 ```bash
 # Alle Services
@@ -232,15 +257,6 @@ docker compose down -v
 - Toast-Benachrichtigungen bei Aktionen
 - Responsive Design für Mobile und Desktop
 - Loading-States und zentrales Error-Handling
-
-## Screenshots
-
-Die Anwendung bietet:
-- Ein modernes, ansprechendes Design mit klarem Layout
-- Ein Eingabefeld mit Mengen-Stepper und Button zum Hinzufügen
-- Eine übersichtliche Liste mit Checkbox, Mengen-Stepper und Lösch-Button
-- Visuelle Unterscheidung zwischen gekauften und nicht-gekauften Items
-- Modals für Bestätigung und Mengen-Eingabe
 
 ---
 
