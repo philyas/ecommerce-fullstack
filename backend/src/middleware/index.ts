@@ -7,3 +7,4 @@ export {
   validateUpdateItem,
   validateIdParam,
 } from './validation.js';
+export { errorHandler } from './errorHandler.js';

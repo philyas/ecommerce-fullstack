@@ -6,22 +6,9 @@
 
 import { Request, Response } from 'express';
 import { itemsService } from '../services/itemsService.js';
-import { sendError, sendNotFound } from '../utils/response.js';
+import { sendNotFound } from '../utils/response.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
 import type { CreateItemDTO, UpdateItemDTO } from '../types/index.js';
-
-/**
- * Wrapper für async Controller-Methoden zur einheitlichen Fehlerbehandlung.
- */
-function asyncHandler(
-  handler: (req: Request, res: Response) => Promise<void>
-): (req: Request, res: Response) => void {
-  return (req, res) => {
-    handler(req, res).catch((error) => {
-      console.error('Controller error:', error);
-      sendError(res, 'An unexpected error occurred');
-    });
-  };
-}
 
 export const itemsController = {
   /**
