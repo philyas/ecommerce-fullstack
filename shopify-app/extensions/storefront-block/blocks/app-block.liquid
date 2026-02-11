@@ -1,0 +1,33 @@
+{% comment %}
+  App Block – erscheint im Theme-Editor unter "Apps".
+  Händler kann Überschrift und Text anpassen.
+{% endcomment %}
+
+<div class="storefront-app-block" style="padding: 1.25rem; margin: 1rem 0; border-radius: 8px; border: 1px solid #e5e7eb; background: #f9fafb;">
+  <h3 style="margin: 0 0 0.5rem 0; font-size: 1.25rem;">
+    {{ block.settings.heading | default: 'Von unserer App' }}
+  </h3>
+  {% if block.settings.text != blank %}
+    <p style="margin: 0; color: #4b5563;">{{ block.settings.text }}</p>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "App Block",
+  "target": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Von unserer App"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
+    }
+  ]
+}
+{% endschema %}

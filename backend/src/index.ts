@@ -2,11 +2,13 @@
  * Application Entry Point.
  * Konfiguriert und startet den Express-Server.
  */
+import 'dotenv/config';
 
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import itemsRouter from './routes/items.js';
+import shopifyRouter from './routes/shopify.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { config } from './config/index.js';
 
@@ -19,11 +21,38 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Erlaubt Shopify Admin, die App in einem iframe zu laden (für eingebettete App)
+app.use((_req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "frame-ancestors https://admin.shopify.com https://*.admin.shopify.com"
+  );
+  next();
+});
+
 // ============================================================================
 // Routes
 // ============================================================================
 
 app.use('/items', itemsRouter);
+app.use('/shopify', shopifyRouter);
+
+// Root – nach Shopify-OAuth Redirect hierher
+app.get('/', (req, res) => {
+  if (req.query.installed === '1') {
+    res.json({
+      message: 'Shopify App installiert.',
+      shop: req.query.shop ?? '',
+      next: `GET /shopify/products?shop=${encodeURIComponent(String(req.query.shop || ''))}`,
+    });
+    return;
+  }
+  res.json({
+    message: 'Backend läuft',
+    health: '/health',
+    shopify: '/shopify/auth?shop=DEIN-SHOP.myshopify.com',
+  });
+});
 
 // Health Check Endpoint
 app.get('/health', (_req, res) => {
